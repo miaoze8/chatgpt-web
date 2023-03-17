@@ -1,13 +1,16 @@
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
 import { t } from '@/locales'
+import { useChatStore } from '@/store'
 
 export function useUsingContext() {
   const ms = useMessage()
+  const chatStore = useChatStore()
+  // const usingContext = computed<boolean>(() => chatStore.usingContext)
   const usingContext = ref<boolean>(false)
 
   function toggleUsingContext() {
-    usingContext.value = !usingContext.value
+    chatStore.setUsingContext(!usingContext.value)
     if (usingContext.value)
       ms.success(t('chat.turnOnContext'))
     else
