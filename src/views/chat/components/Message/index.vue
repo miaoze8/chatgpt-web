@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { NDropdown } from 'naive-ui'
 import AvatarComponent from './Avatar.vue'
 import TextComponent from './Text.vue'
@@ -31,6 +31,11 @@ const textRef = ref<HTMLElement>()
 
 const options = [
   {
+    label: '朗读',
+    key: 'read',
+    icon: iconRender({ icon: 'ri:volume-up-line' }),
+  },
+  {
     label: t('chat.copy'),
     key: 'copyText',
     icon: iconRender({ icon: 'ri:file-copy-2-line' }),
@@ -52,6 +57,33 @@ function handleSelect(key: 'copyRaw' | 'copyText' | 'delete') {
   }
 }
 
+const isReading = ref(false)
+
+const readButtonText = computed(() => {
+  return isReading.value ? '取消朗读' : '朗读文字'
+})
+
+function handleRead() {
+  if (isReading.value) {
+    speechSynthesis.cancel()
+    isReading.value = false
+    return
+  }
+
+  const speech = new SpeechSynthesisUtterance(props.text ?? '')
+  speech.lang = 'zh-CN'
+  speech.volume = 1.0
+  speech.rate = 1.0
+  speech.pitch = 1.0
+  speech.onstart = () => {
+    isReading.value = true
+  }
+  speech.onend = () => {
+    isReading.value = false
+  }
+  speechSynthesis.speak(speech)
+}
+
 function handleRegenerate() {
   emit('regenerate')
 }
@@ -68,6 +100,10 @@ function handleRegenerate() {
     <div class="overflow-hidden text-sm " :class="[inversion ? 'items-end' : 'items-start']">
       <p class="text-xs text-[#b4bbc4]" :class="[inversion ? 'text-right' : 'text-left']">
         {{ dateTime }}
+        <button class="transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-200"
+          @click="handleRead">
+          {{ readButtonText }}
+        </button>
       </p>
       <div
         class="flex items-end gap-1 mt-2"
