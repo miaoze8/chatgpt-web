@@ -100,11 +100,14 @@ function handleRegenerate() {
     <div class="overflow-hidden text-sm " :class="[inversion ? 'items-end' : 'items-start']">
       <p class="text-xs text-[#b4bbc4]" :class="[inversion ? 'text-right' : 'text-left']">
         {{ dateTime }}
-        <button class="transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-200"
-          @click="handleRead">
-          {{ readButtonText }}
-        </button>
       </p>
+<!--       <div class="flex justify-end">-->
+<!--       <button class="transition flex items-center"-->
+<!--          @click="handleRead">-->
+<!--          <SvgIcon class="mr-2" icon="ri:volume-up-line" />-->
+<!--       <span>{{ readButtonText }}</span>-->
+<!--      </button>-->
+<!--      </div>-->
       <div
         class="flex items-end gap-1 mt-2"
         :class="[inversion ? 'flex-row-reverse' : 'flex-row']"
@@ -130,6 +133,13 @@ function handleRegenerate() {
             </button>
           </NDropdown>
         </div>
+      </div>
+			<div class="flex justify-end">
+       <button class="transition flex items-center"
+          @click="handleRead">
+          <SvgIcon class="mr-2" icon="ri:volume-up-line" />
+       <span>{{ readButtonText }}</span>
+      </button>
       </div>
     </div>
   </div>
